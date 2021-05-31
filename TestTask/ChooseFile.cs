@@ -35,6 +35,7 @@ namespace TestTask
 				DownloadTime = DateTime.Now
 			};
 
+			MainForm.Instance.ChangeProcessStatus();
 			var dataProcessor = new DataProcessor(filePath, contactInfo);
 			dataProcessor.DownloadDataAsync();
 			Close();

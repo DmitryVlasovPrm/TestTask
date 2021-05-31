@@ -28,12 +28,34 @@ namespace TestTask
 		// TODO: завершение тасок при exception
 		public void AddRows(List<Contact> items)
 		{
-			//var itemsCount = items.Count;
+			var itemsCount = items.Count;
+			var rows = new object[itemsCount];
 			for (var i = 0; i < 100; i++)
 			{
 				//var curItem = items[i];
-				contactsTable.Invoke(new Action(() => contactsTable.Rows.Add("a", "b", "c", "d", "e", "f", "g", "h")));
+				//rows[i] = new object("a", "b", "c", "d", "e", "f", "g", "h");
 			}
+			contactsTable.Invoke(new Action(() => contactsTable.Rows.Add("a", "b", "c", "d", "e", "f", "g", "h")));
+		}
+
+		public void ChangeProcessStatus()
+		{
+			Invoke(new Action(() =>
+			{
+				if (processStatus.Text == "")
+				{
+					processStatus.Text = "Выполняется загрузка...";
+					downloadCsv.Enabled = false;
+					clearTable.Enabled = false;
+					contactsTable.Rows.Clear();
+				}
+				else
+				{
+					processStatus.Text = "";
+					downloadCsv.Enabled = true;
+					clearTable.Enabled = true;
+				}
+			}));
 		}
 	}
 }

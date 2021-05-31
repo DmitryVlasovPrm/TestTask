@@ -4,13 +4,12 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using EFCore.BulkExtensions;
 
 namespace TestTask
 {
 	public class DbWriter
 	{
-		private const string CONNECTION_STRING = "Server=localhost;Database=Contacts;Trusted_Connection=True;";
+		private const string CONNECTION_STRING = @"Server=(localdb)\mssqllocaldb;Database=Contacts;Trusted_Connection=True;";
 		private readonly int _contactInfoId;
 		private readonly SemaphoreSlim _semaphore;
 
@@ -31,7 +30,7 @@ namespace TestTask
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(ex.Message, "Ошибка в DbWriter", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 
@@ -59,7 +58,7 @@ namespace TestTask
 				}
 				catch (Exception ex)
 				{
-					MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show(ex.Message, "Ошибка в InsertDataAsync", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			});
 		}
@@ -69,8 +68,7 @@ namespace TestTask
 			try
 			{
 				await _semaphore.WaitAsync();
-				var curCategory = dbContext.Categories.
-					FirstOrDefault(x => x.CategoryName == formattedContact.CategoryName);
+				var curCategory = dbContext.Categories.FirstOrDefault(x => x.CategoryName == formattedContact.CategoryName);
 				if (curCategory == null)
 				{
 					curCategory = new Category { CategoryName = formattedContact.CategoryName };
@@ -78,8 +76,7 @@ namespace TestTask
 					await dbContext.SaveChangesAsync();
 				}
 
-				var curCity = dbContext.Cities.
-					FirstOrDefault(x => x.CityName == formattedContact.CityName);
+				var curCity = dbContext.Cities.FirstOrDefault(x => x.CityName == formattedContact.CityName);
 				if (curCity == null)
 				{
 					curCity = new City { CityName = formattedContact.CityName };
@@ -104,7 +101,7 @@ namespace TestTask
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(ex.Message, "Ошибка в CreateContactAsync", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return null;
 			}
 			finally

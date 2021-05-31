@@ -6,12 +6,13 @@ using System.Globalization;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace TestTask
 {
 	public class DataProcessor
 	{
-		private const int MAX_BATCH_SIZE = 5000;
+		private const int MAX_BATCH_SIZE = 1000;
 		private readonly string _fileName;
 		private readonly ContactInfo _contactInfo;
 		private List<OriginalContact> _dataFromFile;
@@ -25,6 +26,9 @@ namespace TestTask
 
 		public async void DownloadDataAsync()
 		{
+			var sw = new Stopwatch();
+			sw.Start();
+
 			await Task.Run(() =>
 			{
 				try
@@ -45,6 +49,7 @@ namespace TestTask
 									var newTask = dbWriter.InsertDataAsync(_dataFromFile);
 									allTasks.Add(newTask);
 									_dataFromFile = new List<OriginalContact>();
+									MainForm.Instance.AddRows(new List<Contact>());
 								}
 							}
 
@@ -56,14 +61,17 @@ namespace TestTask
 
 							_dataFromFile = null;
 							Task.WaitAll(allTasks.ToArray());
-							MessageBox.Show("Файл успешно считан и данные записаны в БД", "TestTask",
+
+							sw.Stop();
+							MainForm.Instance.ChangeProcessStatus();
+							MessageBox.Show($"Файл успешно считан и данные записаны в БД ({Math.Round(sw.Elapsed.TotalSeconds, 1)} сек)", "TestTask",
 									MessageBoxButtons.OK, MessageBoxIcon.Information);
 						}
 					}
 				}
 				catch (Exception ex)
 				{
-					MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show(ex.Message, "Ошибка в DownloadDataAsync", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			});
 		}

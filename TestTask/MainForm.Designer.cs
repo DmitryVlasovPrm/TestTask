@@ -34,6 +34,7 @@ namespace TestTask
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.downloadCsv = new System.Windows.Forms.ToolStripButton();
 			this.clearTable = new System.Windows.Forms.ToolStripButton();
+			this.processStatus = new System.Windows.Forms.ToolStripLabel();
 			this.contactsTable = new System.Windows.Forms.DataGridView();
 			this.phoneNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.lastName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -54,10 +55,11 @@ namespace TestTask
 			this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.downloadCsv,
-            this.clearTable});
+            this.clearTable,
+            this.processStatus});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(1187, 30);
+			this.toolStrip1.Size = new System.Drawing.Size(1187, 26);
 			this.toolStrip1.TabIndex = 1;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -66,7 +68,7 @@ namespace TestTask
 			this.downloadCsv.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.downloadCsv.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.downloadCsv.Name = "downloadCsv";
-			this.downloadCsv.Size = new System.Drawing.Size(126, 27);
+			this.downloadCsv.Size = new System.Drawing.Size(103, 23);
 			this.downloadCsv.Text = "Выбрать файл";
 			this.downloadCsv.Click += new System.EventHandler(this.downloadCsv_Click);
 			// 
@@ -75,9 +77,15 @@ namespace TestTask
 			this.clearTable.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.clearTable.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.clearTable.Name = "clearTable";
-			this.clearTable.Size = new System.Drawing.Size(156, 27);
+			this.clearTable.Size = new System.Drawing.Size(128, 23);
 			this.clearTable.Text = "Очистить таблицу";
 			this.clearTable.Click += new System.EventHandler(this.clearTable_Click);
+			// 
+			// processStatus
+			// 
+			this.processStatus.ForeColor = System.Drawing.Color.Green;
+			this.processStatus.Name = "processStatus";
+			this.processStatus.Size = new System.Drawing.Size(0, 23);
 			// 
 			// contactsTable
 			// 
@@ -104,7 +112,7 @@ namespace TestTask
             this.city,
             this.birthdayDate});
 			this.contactsTable.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.contactsTable.Location = new System.Drawing.Point(0, 30);
+			this.contactsTable.Location = new System.Drawing.Point(0, 26);
 			this.contactsTable.Name = "contactsTable";
 			this.contactsTable.ReadOnly = true;
 			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -119,7 +127,7 @@ namespace TestTask
 			this.contactsTable.RowHeadersWidth = 51;
 			this.contactsTable.RowTemplate.Height = 29;
 			this.contactsTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.contactsTable.Size = new System.Drawing.Size(1187, 655);
+			this.contactsTable.Size = new System.Drawing.Size(1187, 659);
 			this.contactsTable.TabIndex = 2;
 			// 
 			// phoneNumber
@@ -180,7 +188,7 @@ namespace TestTask
 			// 
 			// MainForm
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 23F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1187, 685);
 			this.Controls.Add(this.contactsTable);
@@ -210,6 +218,7 @@ namespace TestTask
 		private System.Windows.Forms.DataGridViewTextBoxColumn city;
 		private System.Windows.Forms.DataGridViewTextBoxColumn birthdayDate;
 		private System.Windows.Forms.DataGridView contactsTable;
+		private System.Windows.Forms.ToolStripLabel processStatus;
 	}
 }
 
