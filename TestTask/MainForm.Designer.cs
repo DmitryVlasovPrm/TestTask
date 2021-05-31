@@ -66,8 +66,8 @@ namespace TestTask
 			this.downloadCsv.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.downloadCsv.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.downloadCsv.Name = "downloadCsv";
-			this.downloadCsv.Size = new System.Drawing.Size(91, 27);
-			this.downloadCsv.Text = "Загрузить";
+			this.downloadCsv.Size = new System.Drawing.Size(126, 27);
+			this.downloadCsv.Text = "Выбрать файл";
 			this.downloadCsv.Click += new System.EventHandler(this.downloadCsv_Click);
 			// 
 			// clearTable

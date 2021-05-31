@@ -9,17 +9,15 @@ namespace TestTask
 		public MainForm()
 		{
 			InitializeComponent();
+			Instance = this;
 		}
+
+		public static MainForm Instance { get; private set; }
 
 		private void downloadCsv_Click(object sender, EventArgs e)
 		{
-			var fileDialog = new OpenFileDialog();
-			if (fileDialog.ShowDialog() == DialogResult.OK)
-			{
-				var dataProcessor = new DataProcessor(fileDialog.FileName);
-				dataProcessor.NewDataReceived += AddRows;
-				dataProcessor.DownloadDataAsync();
-			}
+			var chooseFileForm = new ChooseFile();
+			chooseFileForm.ShowDialog();
 		}
 
 		private void clearTable_Click(object sender, EventArgs e)
@@ -27,15 +25,14 @@ namespace TestTask
 			contactsTable.Rows.Clear();
 		}
 
-		public void AddRows(List<Test> items)
+		// TODO: завершение тасок при exception
+		public void AddRows(List<Contact> items)
 		{
-			var itemsCount = items.Count;
-			for (var i = 0; i < itemsCount; i++)
+			//var itemsCount = items.Count;
+			for (var i = 0; i < 100; i++)
 			{
-				var curItem = items[i];
-				contactsTable.Invoke(new Action(() =>
-					contactsTable.Rows.Add(curItem.a1, curItem.a2, curItem.a3, curItem.a4,
-						curItem.a5, curItem.a6, curItem.a7, curItem.a8)));
+				//var curItem = items[i];
+				contactsTable.Invoke(new Action(() => contactsTable.Rows.Add("a", "b", "c", "d", "e", "f", "g", "h")));
 			}
 		}
 	}

@@ -11,21 +11,21 @@ namespace TestTask
 {
 	public class DataProcessor
 	{
-		private const int MAX_BATCH_SIZE = 10000;
+		private const int MAX_BATCH_SIZE = 5000;
 		private readonly string _fileName;
-		private List<Test> _dataFromFile;
+		private readonly ContactInfo _contactInfo;
+		private List<OriginalContact> _dataFromFile;
 
-		public DataProcessor(string fileName)
+		public DataProcessor(string fileName, ContactInfo contactInfo)
 		{
 			_fileName = fileName;
-			_dataFromFile = new List<Test>();
+			_contactInfo = contactInfo;
+			_dataFromFile = new List<OriginalContact>();
 		}
-
-		public Action<List<Test>> NewDataReceived;
 
 		public async void DownloadDataAsync()
 		{
-			await Task.Run(async () =>
+			await Task.Run(() =>
 			{
 				try
 				{
@@ -34,24 +34,28 @@ namespace TestTask
 					{
 						using (var csvReader = new CsvReader(fileReader, CultureInfo.CurrentCulture))
 						{
+							var dbWriter = new DbWriter(_contactInfo);
+							var allTasks = new List<Task>();
+
 							while (csvReader.Read())
 							{
-								_dataFromFile.Add(csvReader.GetRecord<Test>());
-								if (_dataFromFile.Count > MAX_BATCH_SIZE)
+								_dataFromFile.Add(csvReader.GetRecord<OriginalContact>());
+								if (_dataFromFile.Count == MAX_BATCH_SIZE)
 								{
-									_ = DbWriter.PushDataAsync(_dataFromFile);
-									NewDataReceived.Invoke(_dataFromFile);
-									_dataFromFile = new List<Test>();
+									var newTask = dbWriter.InsertDataAsync(_dataFromFile);
+									allTasks.Add(newTask);
+									_dataFromFile = new List<OriginalContact>();
 								}
 							}
 
 							if (_dataFromFile.Count != 0)
 							{
-								await DbWriter.PushDataAsync(_dataFromFile);
-								NewDataReceived.Invoke(_dataFromFile);
+								var newTask = dbWriter.InsertDataAsync(_dataFromFile);
+								allTasks.Add(newTask);
 							}
 
 							_dataFromFile = null;
+							Task.WaitAll(allTasks.ToArray());
 							MessageBox.Show("Файл успешно считан и данные записаны в БД", "TestTask",
 									MessageBoxButtons.OK, MessageBoxIcon.Information);
 						}
@@ -59,8 +63,7 @@ namespace TestTask
 				}
 				catch (Exception ex)
 				{
-					MessageBox.Show(ex.Message, "Ошибка во время загрузки данных",
-						MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			});
 		}
